@@ -1,5 +1,5 @@
-from model_evaluation import evaluate_model
-from training.model_training import train_model
+from training_and_evaluation.model_evaluation import evaluate_model
+from training_and_evaluation.model_training import train_model
 
 
 def main():
