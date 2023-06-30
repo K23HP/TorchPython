@@ -65,6 +65,8 @@ def train_model(epochs: int, batch_size: int, save=False, model_name=""):
         print(f"Epoch {t+1}\n-------------------------------")
         run_single_training_loop(train_dataloader, model, loss_fn, optimizer, device)
         run_single_test_loop(test_dataloader, model, loss_fn, device)
+        
+    print("Finished Training")
 
     if save:
         if model_name == "":
