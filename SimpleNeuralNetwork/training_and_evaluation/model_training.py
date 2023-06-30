@@ -61,19 +61,20 @@ def train_model(epochs: int, batch_size: int, save=False, model_name=""):
     loss_fn = model.create_cross_entropy_loss()  # Create a cross entropy loss function
     optimizer = model.create_sgd_optimizer()  # Create a SGD optimizer
 
+    print("\nStarting Training")
     for t in range(epochs):
         print(f"Epoch {t+1}\n-------------------------------")
         run_single_training_loop(train_dataloader, model, loss_fn, optimizer, device)
         run_single_test_loop(test_dataloader, model, loss_fn, device)
         
-    print("Finished Training")
+    print("Finished Training\n")
 
     if save:
         if model_name == "":
             save_model(model, "model.pth")
         else:
             save_model(model, model_name)    
-    print("Done!")
+    print("Done!\n")
 
     
 if __name__ == "__main__":
