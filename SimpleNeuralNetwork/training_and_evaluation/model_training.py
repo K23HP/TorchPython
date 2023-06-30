@@ -79,5 +79,5 @@ def train_model(epochs: int, batch_size: int, save=False, model_name=""):
     
 if __name__ == "__main__":
     train_model(
-        epochs=20, batch_size=64, 
-        save=True, model_name="my_first_model.pth")    
+        epochs=100, batch_size=64, 
+        save=True, model_name="mnist_classification_model.pth")    
