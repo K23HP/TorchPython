@@ -1,6 +1,7 @@
+import torch
 from torch.utils.data import DataLoader
 from torchvision import datasets
-from torchvision.transforms import ToTensor
+from torchvision.transforms import ToTensor, Lambda
 
 
 def get_mnist_train_data():
@@ -9,6 +10,10 @@ def get_mnist_train_data():
         train=True,
         download=True,
         transform=ToTensor(),
+        target_transform=Lambda(
+            lambda y:
+                torch.zeros(10, dtype=torch.float).scatter_(0, torch.tensor(y), value=1)
+        )
     )
 
 

@@ -3,3 +3,5 @@ torch_env
 __pycache__
 .history
 data
+working-with-custom-image-dataset
+venv

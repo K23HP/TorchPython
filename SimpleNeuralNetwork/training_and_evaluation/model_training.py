@@ -1,10 +1,13 @@
 import torch
 
-from models.model import NeuralNetwork
+from logging_training.training_log import save_train_losses
+from models.simple_nn_model import NeuralNetwork
 from scripts.download_mnist_dataset import create_dataloader
 from scripts.save_and_load_model import save_model
 from scripts.training_devices import get_training_device
 
+train_losses = []
+test_losses = []
 
 # Create a single training loop
 def run_single_training_loop(dataloader, model, loss_fn, optimizer, device):
@@ -25,6 +28,7 @@ def run_single_training_loop(dataloader, model, loss_fn, optimizer, device):
         if batch % 100 == 0:
             loss, current = loss.item(), (batch + 1) * len(X)
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
+            train_losses.append(loss)
             
 
 # Create a single test loop to ensure model is learning
@@ -37,12 +41,14 @@ def run_single_test_loop(dataloader, model, loss_fn, device):
         for X, y in dataloader:
             X, y = X.to(device), y.to(device)
             pred = model(X)
-            test_loss += loss_fn(pred, y).item()
+            loss = loss_fn(pred, y).item()
+            test_loss += loss
             correct += (pred.argmax(1) == y).type(torch.float).sum().item()
     test_loss /= num_batches
     correct /= size
     print(f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, " + \
         f"Avg loss: {test_loss:>8f} \n")
+    test_losses.append(test_loss)
     
 
 # Create a train function
@@ -59,13 +65,17 @@ def train_model(epochs: int, batch_size: int, save=False, model_name=""):
     print(f"\nModel: {model}")
 
     loss_fn = model.create_cross_entropy_loss()  # Create a cross entropy loss function
-    optimizer = model.create_sgd_optimizer()  # Create a SGD optimizer
+    # optimizer = model.create_sgd_optimizer()  # Create a SGD optimizer
+    optimizer = model.create_adam_optimizer()  # Create a Adam optimizer
 
     print("\nStarting Training")
     for t in range(epochs):
         print(f"Epoch {t+1}\n-------------------------------")
         run_single_training_loop(train_dataloader, model, loss_fn, optimizer, device)
         run_single_test_loop(test_dataloader, model, loss_fn, device)
+    
+    # Save losses for later evaluation
+    save_train_losses(train_losses, test_losses)
         
     print("Finished Training\n")
 

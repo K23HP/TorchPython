@@ -14,13 +14,15 @@ class NeuralNetwork(nn.Module):
             nn.Linear(512, 10),
         )
 
-    def forward(self, x):  
+    def forward(self, x):
         x = self.flatten(x)
-        logits = self.linear_relu_stack(x)
-        return logits
+        return self.linear_relu_stack(x)
 
     def create_cross_entropy_loss(self):
         return nn.CrossEntropyLoss()
 
     def create_sgd_optimizer(self, lr=1e-3):
         return torch.optim.SGD(self.parameters(), lr=lr)
+
+    def create_adam_optimizer(self, lr=1e-3):
+        return torch.optim.Adam(self.parameters(), lr=lr)
