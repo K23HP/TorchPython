@@ -5,3 +5,6 @@ __pycache__
 data
 working-with-custom-image-dataset
 venv
+*.pdf
+LSTM
+MLP
