@@ -8,3 +8,4 @@ venv
 *.pdf
 LSTM
 MLP
+TorchTutorial
